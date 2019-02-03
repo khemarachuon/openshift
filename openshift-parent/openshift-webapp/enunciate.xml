@@ -1,0 +1,20 @@
+<enunciate xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="http://enunciate.webcohesion.com/schemas/enunciate-2.0.0-M.4.xsd">
+
+	<title>OpenShift Webapp API</title>
+	<description package="com.khemarachuon.openshift.webapp" />
+	<api-license name="GNU General Public License v3.0" url="https://github.com/khemarachuon/openshift/blob/master/LICENSE" />
+
+	<application root="/rest" />
+
+	<namespaces>
+		<namespace id="openshift-webapp" uri="https://www.khemarachuon.com/openshift-webapp" />
+	</namespaces>
+
+	<modules>
+		<idl disabled="false" disableWadl="false" />
+		<jaxb disabled="false" />
+		<jaxrs disabled="false" />
+		<swagger disabled="false" docsSubdir="swagger" />
+	</modules>
+</enunciate>

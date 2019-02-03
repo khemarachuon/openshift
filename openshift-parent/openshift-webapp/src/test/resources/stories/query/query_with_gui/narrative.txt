@@ -1,0 +1,5 @@
+Feature Query with GUI
+
+Meta:
+@issue DAD-40
+@tag product:search

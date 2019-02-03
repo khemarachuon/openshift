@@ -1,0 +1,5 @@
+Capability
+
+Meta:
+@issue DAD-40
+@tag product:search
