@@ -6,10 +6,13 @@ import java.net.UnknownHostException;
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+import javax.inject.Inject;
+import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -36,18 +39,41 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.khemarachuon.openshift.common.json.JsonUtils;
+import com.khemarachuon.openshift.dao.UserDao;
+import com.khemarachuon.openshift.dao.entity.UserEntity;
 import com.khemarachuon.openshift.webapp.resources.Acronym;
 import com.webcohesion.enunciate.metadata.rs.TypeHint;
+
 
 @Path("search")
 public class ElasticSearchEndpoint {
 
 	private static final Logger LOG = LoggerFactory.getLogger(ElasticSearchEndpoint.class);
 
+//	@Inject
+	private UserDao userDao = new UserDao();
+
 	@TypeHint(value=Acronym.class)
 	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 	@GET
-	public Response search(@QueryParam("term") final String term) throws UnknownHostException, JsonProcessingException {
+	public Response search(@QueryParam("term") final String term,
+			@QueryParam("start") @DefaultValue("0") Integer start,
+			@QueryParam("count") @DefaultValue("10") Integer count) {
+		UserEntity testUserA = new UserEntity();
+		testUserA.setUsername("userA");
+		testUserA.setRoles(new TreeSet<>(Arrays.asList("USER", "ADMIN")));
+		userDao.createUser(testUserA);
+		
+		List<UserEntity> users = userDao.getUsers(null, start, count);
+		return Response.ok(JsonUtils.generateJson(users, false)).build();
+	}
+	
+	@TypeHint(value=Acronym.class)
+	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+	@GET
+	@Path("elastic")
+	public Response elasticsearch(@QueryParam("term") final String term) throws UnknownHostException, JsonProcessingException {
 		try (final TransportClient client = new PreBuiltTransportClient(Settings.builder()
 				.put("client.transport.sniff", true)
 				.put("cluster.name", "elasticsearch")

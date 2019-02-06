@@ -15,6 +15,12 @@
 			<!-- project dependencies -->
 			<dependency>
 				<groupId>${project.groupId}</groupId>
+				<artifactId>openshift-dao</artifactId>
+				<version>${project.version}</version>
+				<scope>compile</scope>
+			</dependency>
+			<dependency>
+				<groupId>${project.groupId}</groupId>
 				<artifactId>openshift-webapp</artifactId>
 				<version>${project.version}</version>
 				<scope>compile</scope>
